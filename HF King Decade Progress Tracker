@@ -1,0 +1,25 @@
+// ==UserScript==
+// @name        King Decade Progress Tracker
+// @author      TheCuriousCoyote
+// @namespace   https://github.com/TheCuriousCoyote
+// @version     1.0.0
+// @description Calculates a rough estimate of days left until earning the King Decade award.
+// @match       ://hackforums.net/awardgoals.php
+// @copyright   2023+
+// ==/UserScript==
+
+// ------------------------------ SETTINGS ------------------------------
+const awardThreshold = 3652;
+// ------------------------------ SCRIPT ------------------------------
+
+// Get King Decade awardgoal card, then progress
+const kingdecadeparentElement = $("i[title='King Decade']").parent().parent();
+const kingdecadeElement = kingdecadeparentElement.length > 0 ? kingdecadeparentElement[0] : null;
+const progress = kingdecadeElement ? $(kingdecadeElement).find(".percentage").text().replace('%', '') : 0;
+
+// Calculate days and differences
+const estimatedDays = Math.floor(awardThreshold * (progress / 100));
+const remainingDays = awardThreshold - estimatedDays;
+
+// Append results to card
+$(kingdecadeparentElement).append($("<div>").text(`Days Remaining: ~${remainingDays}`));
